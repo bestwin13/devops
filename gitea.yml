@@ -1,0 +1,40 @@
+services:
+  gitea:
+    image: gitea/gitea:latest
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    volumes:
+      - gitea_data:/data
+    environment:
+      USER_UID: "1000"
+      USER_GID: "1000"
+
+      # MAILER
+      GITEA__mailer__ENABLED: "true"
+      GITEA__mailer__PROTOCOL: "smtps"
+      GITEA__mailer__SMTP_ADDR: "smtp.gmail.com"
+      GITEA__mailer__SMTP_PORT: "465"
+      GITEA__mailer__FROM: "Gitea <bestwinpaul2003@gmail.com>"
+      GITEA__mailer__USER: "bestwinpaul2003@gmail.com"
+      GITEA__mailer__PASSWD: "mdsuifksscguqwlc"
+
+      # SERVICE OPTIONS
+      GITEA__service__REGISTER_EMAIL_CONFIRM: "true"
+      GITEA__service__ENABLE_NOTIFY_MAIL: "true"
+
+    networks:
+      - gitea_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
+networks:
+  gitea_net:
+    driver: overlay
+
+volumes:
+  gitea_data:
+
