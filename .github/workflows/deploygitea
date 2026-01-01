@@ -1,0 +1,23 @@
+name: Deploy Gitea to Swarm
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify Docker
+        run: docker info
+
+      - name: Deploy Gitea Stack
+        run: |
+          docker stack deploy -c gitea.yml gitea
+
+          
